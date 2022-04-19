@@ -1,0 +1,51 @@
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
+}
+
+
+.text-box-notes {
+  width: 100%;
+}
+
+.slider-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.slider {
+  width: 75%;
+}
+
+.textfield-container {
+  margin-top: 10px;
+}
+.submit-button-container {
+  display: flex;
+  justify-content: right;
+  margin-top: 10px;
+}
+
+.like-dislike-container {
+  display: flex;
+  justify-content: space-evenly;
+  /* padding-top:15px; */
+  margin-bottom: 15px
+}
+
+.title-container {
+  display: flex;
+  justify-content: center;
+}
+h2 {
+  text-align: center;
+}
+
+
+.popup-sub-heading {
+  margin-top: 10px;
+  margin-bottom:0px;
+  text-align: center;
+  width: 100%;
+}
