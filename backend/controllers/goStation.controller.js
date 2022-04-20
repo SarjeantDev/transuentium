@@ -31,16 +31,15 @@ export const getGoStations = async (req, res) => {
 
 // update post controller
 export const updateGoStationInfo = async (req, res) => {
-
-    console.log('update', req)
-    const { id: _id } = req.params;
+    // extracting id from req.params
+    const { _id: id } = req.params;
     const post = req.body;
 
     // checking if the id is valid in the mongoose db, if it's not valid just return a status saying nothings returned
-    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id');
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id');
 
     // first param is the id, the second is the new idea, and we need to set the third to true
-    const updatedGoStationInfo = await PostMessage.findByIdAndUpdate(_id, post, { new: true });
+    const updatedGoStationInfo = await PostMessage.findByIdAndUpdate(id, post, { new: true });
 
     res.json(updatedGoStationInfo)
 }

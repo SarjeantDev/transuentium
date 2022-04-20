@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Popup } from "react-leaflet"
-import { likeStation, dislikeStation, sanitaryLevel, safetyLevel } from "../actions/popups"
 import { SanitarySlider, SafetySlider } from "./Slider";
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
@@ -13,8 +12,11 @@ import SendIcon from '@mui/icons-material/Send';
 import { updatePost } from "../api";
 import { useDispatch } from 'react-redux';
 
+
 const LoadPopups = ({ station }) => {
     // const dispatch = useDispatch();
+
+    const [currentId, setCurrentId] = useState(null)
 
     return (
         <Popup>
