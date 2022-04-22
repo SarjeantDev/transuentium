@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
-import LoadMarkers from "./components/Markers"
+import LoadMarkers from "./features/markers/Markers"
 import './App.css';
 
 function App() {

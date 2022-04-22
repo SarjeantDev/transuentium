@@ -21,6 +21,7 @@
 .textfield-container {
   margin-top: 10px;
 }
+
 .submit-button-container {
   display: flex;
   justify-content: right;
@@ -38,6 +39,7 @@
   display: flex;
   justify-content: center;
 }
+
 h2 {
   text-align: center;
 }
@@ -45,7 +47,11 @@ h2 {
 
 .popup-sub-heading {
   margin-top: 10px;
-  margin-bottom:0px;
+  margin-bottom: 0px;
   text-align: center;
   width: 100%;
+}
+
+.leaflet-popup-content p {
+  margin: 0;
 }

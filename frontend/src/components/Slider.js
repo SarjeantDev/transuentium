@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import Slider from '@mui/material/Slider';
 import '../App.css';
 
-export const SanitarySlider = () => {
+export const SanitarySlider = ({ rating }) => {
 
-    const [value, setValue] = React.useState('Controlled');
+    const [value, setRating] = React.useState('Controlled');
     const marks = [
         {
             value: 1,
@@ -21,19 +21,21 @@ export const SanitarySlider = () => {
     ];
 
     const handleChange = (event) => {
-        setValue(event.target.value);
+        setRating(event.target.value);
+        console.log("This is the current rating: ", value)
     };
 
     function valuetext(value) {
         return value;
     }
+
     return (
         <div className="slider-container">
             <div className="slider">
                 <Slider
                     className="popup-slider"
                     aria-label="Custom marks"
-                    defaultValue={3}
+                    defaultValue={rating}
                     getAriaValueText={valuetext}
                     step={1}
                     marks={marks}
@@ -46,9 +48,9 @@ export const SanitarySlider = () => {
     );
 }
 
-export const SafetySlider = () => {
+export const SafetySlider = ({ rating }) => {
 
-    const [value, setValue] = React.useState('Controlled');
+    const [value, setRating] = React.useState('Controlled');
     const marks = [
         {
             value: 1,
@@ -70,7 +72,8 @@ export const SafetySlider = () => {
     }
 
     const handleChange = (event) => {
-        setValue(event.target.value);
+        setRating(event.target.value);
+        console.log("This is the current rating: ", value)
     };
 
     return (
@@ -80,7 +83,7 @@ export const SafetySlider = () => {
                 <Slider
                     className="popup-slider"
                     aria-label="Custom marks"
-                    defaultValue={3}
+                    defaultValue={rating}
                     getAriaValueText={valuetext}
                     step={1}
                     marks={marks}
