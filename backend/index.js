@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 })
 app.use("/gostations", goStationsRouter);
 app.listen(port, () => {
-    console.log(`Backend running on port http://localhost:${port}`)
+    console.log(`Backend running on port ${port}`)
 })
 
 

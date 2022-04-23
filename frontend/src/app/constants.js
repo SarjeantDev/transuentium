@@ -1,5 +1,5 @@
-export const endpoint = "http://localhost:5000"
-// export const endpoint = process.env.DB_LINK || "https://transuentium-heroku.herokuapp.com"
+// export const endpoint = "http://localhost:5000"
+export const endpoint = "https://transuentium-heroku.herokuapp.com"
 
 export const HTTP_STATUS = Object.freeze({
     PENDING: 'PENDING',
