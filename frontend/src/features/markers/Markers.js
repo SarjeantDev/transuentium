@@ -3,6 +3,7 @@ import { Marker } from "react-leaflet"
 import LoadPopups from "../../components/Popups";
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchGoStations, getAllGoStations, getAllGoStationsStatus } from './markersSlice'
+import { reset, fetchSpecificGoStation } from "../markerForm/markerFormSlice"
 import { HTTP_STATUS } from "../../app/constants"
 
 const LoadMarkers = () => {
@@ -29,6 +30,12 @@ const LoadMarkers = () => {
                                 station.coordinates[1],
                                 station.coordinates[0]
                             ]}
+                            eventHandlers={{
+                                click: () => {
+                                    dispatch(fetchSpecificGoStation({ id: station._id }))
+                                }
+                            }}
+
                         >
                             <LoadPopups station={station} />
                         </Marker>

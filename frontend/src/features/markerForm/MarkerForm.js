@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
+import CircularProgress from '@mui/material/CircularProgress';
 import { HTTP_STATUS } from "../../app/constants"
 
 import { SanitarySlider, SafetySlider } from "../../components/Slider";
@@ -24,45 +25,105 @@ import {
     updateGoStationInfo,
     fetchSpecificGoStation,
     getSpecificGoStation,
-    getSpecificGoStationStatus
+    getSpecificGoStationStatus,
+    getSpecificGoStationNotes,
+    updateSpecificGoStation,
+    updateSpecificGoStationStatus
 } from "../markerForm/markerFormSlice"
 
-const Form = ({ station }) => {
-    const [noteText, setNoteText] = useState("")
-    const [notes, setNotes] = useState([])
-    const dispatch = useDispatch();
-    // const specificGoStations = useSelector(getSpecificGoStation)
+import Modal from "../../components/Modal"
 
-    const specificGoStations = useSelector(getSpecificGoStation)
-    const specificGoStationsStatus = useSelector(getSpecificGoStationStatus)
+
+
+const Form = ({ station }) => {
+
+    const [currentStation, setCurrentStation] = useState(station)
+    const [currentId, setCurrentId] = useState(station._id)
+    const [postingInProg, setPostingInProg] = useState(true)
+
+    const [noteText, setNoteText] = useState("")
+    const [sanitaryRating, setSanitaryRating] = useState()
+    const [safetyRating, setSafetyRating] = useState()
+    const [servicesIncluded, setServicesIncluded] = useState()
+    const [stationLiked, setStationLiked] = useState(false)
+    const [stationDisliked, setStationDisliked] = useState(false)
+
+    const dispatch = useDispatch();
+    const getSpecificStation = useSelector(getSpecificGoStation)
+    const getSpecificStationStatus = useSelector(getSpecificGoStationStatus)
+
+    const updateSpecificStation = useSelector(updateSpecificGoStation)
+    const updateSpecificStationStatus = useSelector(updateSpecificGoStationStatus)
+
+    console.log("Updating Status...", updateSpecificStationStatus)
 
     // run only when dispatch changes - dependency
     useEffect(() => {
-        // if (specificGoStationsStatus !== HTTP_STATUS.FULFILLED) {
-        dispatch(fetchSpecificGoStation({ id: station._id }))
-        // }
+        dispatch(fetchSpecificGoStation({ id: currentId }))
     }, [dispatch])
 
+    useEffect(() => {
+        dispatch(updateSanitaryRating(sanitaryRating))
+    }, [sanitaryRating])
 
+    useEffect(() => {
+        dispatch(updateSafetyRating(safetyRating))
+    }, [safetyRating])
 
-    console.log(specificGoStations, specificGoStationsStatus)
+    useEffect(() => {
+        dispatch(updateServices(servicesIncluded))
+    }, [servicesIncluded])
 
+    useEffect(() => {
+        dispatch(updateLikeCount(stationLiked))
+    }, [stationLiked])
+
+    useEffect(() => {
+        dispatch(updateDislikeCount(stationDisliked))
+    }, [stationDisliked])
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (noteText !== "") {
+            dispatch(
+                updateGoStationInfo({
+                    id: currentId,
+                    note: noteText,
+                    sanitaryRating: sanitaryRating,
+                    safetyRating: safetyRating,
+                    servicesIncluded: servicesIncluded,
+                    stationLiked: stationLiked,
+                    stationDisliked: stationDisliked
+                }))
+                .then(() => dispatch(fetchSpecificGoStation({ id: currentId })))
+                .catch(() => console.log("error"))
+        }
+    }
+
+    const average = (array) => {
+        if (array.length > 1) return Math.round(array.reduce((a, b) => a + b) / array.length)
+        if (array.length === 1) return array[0]
+        return 3
+    }
     return (
-        <>
-            <Container className="like-dislike-container">
-                <ThumbUpAltIcon fontSize="small" onClick={() => console.log("hello")} />
-                <ThumbDownAltIcon fontSize="small" />
-            </Container>
+        <form onSubmit={(e) => handleSubmit(e)}>
+            <div className="like-dislike-container">
+                <ThumbUpAltIcon fontSize="small" sx={{ color: stationLiked ? "rgb(25, 118, 210)" : "rgb(51, 51, 51)" }} onClick={() => setStationLiked(!stationLiked)} />
+                <ThumbDownAltIcon fontSize="small" sx={{ color: stationDisliked ? "rgb(25, 118, 210)" : "rgb(51, 51, 51)" }} onClick={() => setStationDisliked(!stationDisliked)} />
+            </div>
 
-            <IconLabelButtons />
+            <Modal />
+
+            <IconLabelButtons updateServicesIncluded={(services) => setServicesIncluded(services)} />
 
             <h3 className="popup-sub-heading">Sanitary Level</h3>
-            <SanitarySlider />
+            <SanitarySlider rating={average(station.sanitaryRating)} updateSanitaryRating={(rating) => setSanitaryRating(rating)} />
 
             <h3 className="popup-sub-heading">Safety Level</h3>
-            <SafetySlider />
+            <SafetySlider rating={average(station.safetyRating)} updateSafetyRating={(rating) => setSafetyRating(rating)} />
 
             <TextField
+                sx={{ marginTop: 1 }}
                 className="text-box-notes"
                 label="Notes"
                 multiline
@@ -73,25 +134,39 @@ const Form = ({ station }) => {
 
             <div className="submit-button-container">
                 <Button variant="contained"
-                    onClick={(e) => {
-                        if (noteText !== "") {
-                            dispatch(updateGoStationInfo({ id: station._id, note: noteText }))
-                            dispatch(fetchSpecificGoStation({ id: station._id }))
-                            dispatch(updateNote({ note: station.notes }))
-                        }
-                        console.log("station.notes ", station.notes, notes)
-                    }}
+                    type="submit"
                     endIcon={<SendIcon />}
+                    onClick={() => alert("Your file is being uploaded!")}
                 >Submit</Button>
             </div>
 
             {
+                getSpecificStationStatus !== HTTP_STATUS.FULFILLED ?
+                    station.notes.map((note, i) =>
+                        <OutlinedCard key={note.noteId} note={note} />
+                    ) :
+                    getSpecificStation.notes.map((note, i) =>
+                        <OutlinedCard key={note.noteId} note={note} />
+                    )
+            }
+
+
+
+            {/* {
+                goStations.map((note) => {
+                    return (
+                        <OutlinedCard key={note.noteId} note={note} />
+                    )
+                })
+            } */}
+
+            {/* {
                 specificGoStationsStatus !== HTTP_STATUS.FULFILLED ?
                     null :
                     specificGoStations.notes.map((note) => (
                         <OutlinedCard key={note.noteId} note={note} />
                     ))
-            }
+            } */}
 
             {/* {
                 specificGoStationsStatus !== HTTP_STATUS.FULFILLED ?
@@ -116,7 +191,7 @@ const Form = ({ station }) => {
                 null
             )} */}
 
-        </>
+        </form >
     );
 }
 

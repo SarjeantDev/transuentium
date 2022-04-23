@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import Slider from '@mui/material/Slider';
 import '../App.css';
 
-export const SanitarySlider = ({ rating }) => {
-
-    const [value, setRating] = React.useState('Controlled');
+export const SanitarySlider = ({ rating, updateSanitaryRating }) => {
+    const [value, setValue] = useState(rating);
     const marks = [
         {
             value: 1,
@@ -21,8 +20,8 @@ export const SanitarySlider = ({ rating }) => {
     ];
 
     const handleChange = (event) => {
-        setRating(event.target.value);
-        console.log("This is the current rating: ", value)
+        setValue(event.target.value)
+        updateSanitaryRating(event.target.value)
     };
 
     function valuetext(value) {
@@ -35,6 +34,7 @@ export const SanitarySlider = ({ rating }) => {
                 <Slider
                     className="popup-slider"
                     aria-label="Custom marks"
+                    value={value}
                     defaultValue={rating}
                     getAriaValueText={valuetext}
                     step={1}
@@ -48,9 +48,8 @@ export const SanitarySlider = ({ rating }) => {
     );
 }
 
-export const SafetySlider = ({ rating }) => {
-
-    const [value, setRating] = React.useState('Controlled');
+export const SafetySlider = ({ rating, updateSafetyRating }) => {
+    const [value, setValue] = useState(rating);
     const marks = [
         {
             value: 1,
@@ -72,8 +71,8 @@ export const SafetySlider = ({ rating }) => {
     }
 
     const handleChange = (event) => {
-        setRating(event.target.value);
-        console.log("This is the current rating: ", value)
+        setValue(event.target.value)
+        updateSafetyRating(event.target.value)
     };
 
     return (
@@ -81,8 +80,10 @@ export const SafetySlider = ({ rating }) => {
             <div className="slider">
 
                 <Slider
+
                     className="popup-slider"
                     aria-label="Custom marks"
+                    value={value}
                     defaultValue={rating}
                     getAriaValueText={valuetext}
                     step={1}

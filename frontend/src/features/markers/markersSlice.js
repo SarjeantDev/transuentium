@@ -34,6 +34,4 @@ const goStationMarkersSlice = createSlice({
 export const getAllGoStations = (state) => state.markers.list
 export const getAllGoStationsStatus = (state) => state.markers.status
 
-export const selectNotes = (state) => state.markers.list
-
 export default goStationMarkersSlice.reducer

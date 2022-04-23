@@ -28,31 +28,44 @@ export const getSpecificGoStation = async (req, res) => {
 export const updateGoStationInfo = async (req, res) => {
     // extracting id from req.params
     const { id } = req.params;
-    const noteMessage = req.body;
-    // console.log("updateGoStationInfo params, body, status", req.params, req.body, "\n\n\n", noteMessage)
+    console.log(req.body)
+    const updatedStationInfo = req.body;
+
+    console.log(updatedStationInfo)
 
     // checking if the id is valid in the mongoose db, if it's not valid just return a status saying nothings returned
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id');
 
     goStationsModel.findById(id, function (err, goStation) {
         if (goStation.length === 0) return res.json();
-        const currentNotes = goStation.notes;
-        // console.log(currentNotes)
+
+        const existingNotes = goStation.notes;
+        const existingSanitaryRatings = goStation.sanitaryRating
+        const existingSafetyRatings = goStation.safetyRating
+        const existingServicesIncluded = goStation.services
 
         const NewNote = {
-            noteId: goStation.notes.length,
-            note: noteMessage.note,
+            noteId: existingNotes.length,
+            note: updatedStationInfo.note,
         };
 
-        // console.log("These are the current notes", currentNotes)
-        goStation.notes.push(NewNote);
+        goStation.likeCount = goStation.likeCount + (updatedStationInfo.stationLiked ? 1 : 0)
+        goStation.dislikeCount = goStation.dislikeCount + (updatedStationInfo.stationDisliked ? 1 : 0)
+
+        updatedStationInfo.servicesIncluded.forEach((element) => {
+            existingServicesIncluded.indexOf(element) === -1 ? existingServicesIncluded.push(element) : null
+        });
+
+        if (updatedStationInfo.sanitaryRating) existingSanitaryRatings.push(updatedStationInfo.sanitaryRating)
+        if (updatedStationInfo.safetyRating) existingSafetyRatings.push(updatedStationInfo.safetyRating)
+        if (updatedStationInfo.note) existingNotes.push(NewNote);
+
         goStation.save(function (err) {
             if (err) {
                 console.log("there was an err", err)
             }
             return res.json();
         })
-        // console.log("Current gostation:", goStation)
     });
 }
 
