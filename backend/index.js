@@ -13,6 +13,7 @@ app.use(cors());
 app.get("/", (req, res) => {
     res.send("Hello world")
 })
+
 app.use("/gostations", goStationsRouter);
 app.listen(port, () => {
     console.log(`Backend running on port ${port}`)
