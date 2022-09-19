@@ -5,7 +5,7 @@ import './App.css';
 
 function App() {
   return (
-    <MapContainer center={[49.411, -97.646]} zoom={5} scrollWheelZoom={true}>
+    <MapContainer center={[49.095, -89.780]} zoom={5} scrollWheelZoom={true}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
